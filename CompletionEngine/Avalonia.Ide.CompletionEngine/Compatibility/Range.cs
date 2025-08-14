@@ -141,6 +141,10 @@ namespace System
 
             return ((uint)Value).ToString();
         }
+
+        // Equality operators (CA1815)
+        public static bool operator ==(Index left, Index right) => left._value == right._value;
+        public static bool operator !=(Index left, Index right) => left._value != right._value;
     }
 
     /// <summary>Represent a range has start and end indexes.</summary>
@@ -232,6 +236,10 @@ namespace System
 
             return (start, end - start);
         }
+
+        // Equality operators (CA1815)
+        public static bool operator ==(Range left, Range right) => left.Start.Equals(right.Start) && left.End.Equals(right.End);
+        public static bool operator !=(Range left, Range right) => !(left == right);
     }
 }
 

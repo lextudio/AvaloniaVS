@@ -64,6 +64,9 @@ public class XmlParser
 
     public bool IsInClosingTag => _isClosingTag;
 
+    // Minimal public exposure for external outline enumeration
+    public int ElementNameStart => _elementNameStart;
+
     public XmlParser(ReadOnlyMemory<char> data, int start = 0)
     {
         _containingTagStart = new Stack<int>();
@@ -94,7 +97,7 @@ public class XmlParser
         return true;
     }
 
-    private bool ParseChar()
+    public bool ParseChar()
     {
         if (_parserPos >= _data.Length)
         {
@@ -242,7 +245,7 @@ public class XmlParser
     {
         if (NestingLevel - startLevel - 1 < 0)
             return null;
-        var attribRegExpr = new Regex($"\\s?(?:{attributeExpr})\\s*\\=\\s*\"(?<AttribValue>.*?)\"",RegexOptions.Multiline | RegexOptions.IgnorePatternWhitespace);
+        var attribRegExpr = new Regex($"\\s(?:{attributeExpr})=\"(?<AttribValue>.*?)\"");
         foreach (var start in _containingTagStart.Skip(startLevel))
         {
             var m = Regex.Match(_data.Span.Slice(start).ToString(), @"^<[^<]+");
